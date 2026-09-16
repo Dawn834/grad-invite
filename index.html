@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thiệp mời tốt nghiệp — Dawn (Đức)</title>
+<meta name="description" content="Lời mời tham dự lễ tốt nghiệp của Đức — 10:00, Thứ Bảy 26/09/2026.">
+<meta name="theme-color" content="#6E1420">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Thiệp mời tốt nghiệp — Dawn (Đức)">
+<meta property="og:description" content="Bạn nhận được một lời mời từ Đức.">
+<meta property="og:image" content="assets/img/portrait.jpg">
+<meta property="og:locale" content="vi_VN">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ══ MÀN 1 — CỔNG CHÀO ══ -->
+<section class="gate" id="gate">
+  <div class="gate__bg" aria-hidden="true"></div>
+  <div class="gate__inner">
+    <p class="eyebrow eyebrow--light">Lời mời tham dự</p>
+    <h1 class="gate__title">Bạn nhận được một lời mời từ Đức</h1>
+    <p class="gate__sub">Nhập tên của bạn để mở thiệp nhé.</p>
+
+    <form class="gate__form" id="gate-form" novalidate>
+      <label class="sr-only" for="guest-input">Tên của bạn</label>
+      <input
+        class="gate__input" id="guest-input" name="guest" type="text"
+        placeholder="Tên của bạn..." maxlength="40" required
+        autocomplete="name" enterkeyhint="next"
+        aria-describedby="gate-error">
+
+      <label class="sr-only" for="year-input">Năm sinh của bạn</label>
+      <input
+        class="gate__input gate__input--year" id="year-input" name="year" type="text"
+        placeholder="Năm sinh của bạn..." maxlength="4" required
+        inputmode="numeric" pattern="[0-9]*" autocomplete="bday-year" enterkeyhint="go"
+        aria-describedby="year-hint gate-error">
+      <p class="gate__hint" id="year-hint">Đức cần năm sinh để xưng hô cho đúng vai.</p>
+
+      <button class="btn btn--gate" type="submit">Mở thiệp mời</button>
+      <p class="gate__error" id="gate-error" role="alert" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ══ MÀN 2 — THIỆP MỜI ══ -->
+<main class="card" id="card" hidden>
+
+  <!-- 5.1 Hero -->
+  <section class="hero">
+    <div class="hero__text reveal">
+      <p class="eyebrow">Thư mời tham dự</p>
+      <p class="hero__greet">Chào <strong class="js-name" data-name></strong>,</p>
+      <h1 class="hero__title">Chào mừng đến với lễ tốt nghiệp của <span data-self="low">Đức</span></h1>
+      <p class="hero__sub">Một chặng đường đã khép lại để mở ra những hành trình mới.</p>
+      <p class="hero__brand">Hello, I'm <span>Dawn</span></p>
+    </div>
+    <figure class="hero__figure">
+      <img src="assets/img/portrait.jpg" alt="Ảnh chân dung của Đức" width="832" height="1248" fetchpriority="high">
+    </figure>
+    <button class="scroll-cue" type="button" id="scroll-cue" aria-label="Cuộn xuống để đọc thư mời">
+      <span aria-hidden="true">↓</span>
+    </button>
+  </section>
+
+  <!-- 5.2 Thư mời -->
+  <section class="letter" id="letter">
+    <div class="letter__inner reveal">
+      <p class="eyebrow">Đôi lời</p>
+      <p class="letter__p">
+        <span data-self="cap">Đức</span> rất vui và vinh dự được mời
+        <strong class="js-name" data-name></strong>
+        đến tham dự lễ trao bằng tốt nghiệp đại học của <span data-self="low">mình</span>.
+      </p>
+      <p class="letter__p">
+        Sự hiện diện của <strong class="js-name" data-name></strong>
+        là niềm hạnh phúc và sự động viên to lớn đối với <span data-self="low">Đức</span>.
+      </p>
+      <p class="letter__sign">Dawn</p>
+    </div>
+  </section>
+
+  <!-- 5.3 Info Card -->
+  <section class="info">
+    <!-- <div class="info__media reveal" aria-hidden="true"></div> -->
+    <div class="info__card reveal">
+      <p class="eyebrow eyebrow--light">Thông tin buổi lễ</p>
+
+      <dl class="info__list">
+        <div class="info__row">
+          <dt>Thời gian</dt>
+          <dd id="info-time">10:00 sáng — Thứ Bảy, 26/09/2026</dd>
+        </div>
+        <div class="info__row">
+          <dt>Địa điểm</dt>
+          <dd id="info-venue"></dd>
+        </div>
+      </dl>
+
+      <div class="info__actions">
+        <a class="btn btn--ghost" id="btn-directions" href="#" target="_blank" rel="noopener">Chỉ đường</a>
+        <button class="btn btn--ghost" id="btn-calendar" type="button">Thêm vào lịch</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5.4 Timeline -->
+  <section class="timeline">
+    <div class="timeline__inner">
+      <p class="eyebrow reveal">Chương trình</p>
+      <h2 class="timeline__title reveal">Lịch trình trong ngày</h2>
+      <ol class="timeline__list" id="timeline-list"></ol>
+    </div>
+  </section>
+
+  <!-- 5.5 Footer -->
+  <footer class="foot">
+    <div class="foot__inner">
+      <p class="foot__line">Thân mời, <strong class="js-name" data-name></strong>. Hẹn gặp lại!</p>
+      <p class="foot__brand">Dawn • 2026</p>
+      <button class="foot__reset" type="button" id="btn-reset">Không phải bạn? Nhập lại tên</button>
+    </div>
+  </footer>
+</main>
+
+<!-- Toggle nhạc nền -->
+<button class="audio-toggle" id="audio-toggle" type="button" hidden
+        aria-label="Tắt nhạc nền" aria-pressed="true">
+  <span class="audio-toggle__icon" aria-hidden="true">🔊</span>
+</button>
+<audio id="bgm" loop preload="none" src="assets/audio/bgm.mp3"></audio>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
