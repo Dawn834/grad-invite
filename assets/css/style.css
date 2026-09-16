@@ -221,14 +221,19 @@ button { font: inherit; color: inherit; }
 }
 .hero__brand span { color: var(--c-forest); font-weight: 500; }
 
-.hero__figure { margin: 0; }
-.hero__figure img {
+/* Slideshow: mọi slide chồng lên nhau ở cùng ô grid, chỉ .is-active hiện */
+.hero__figure { margin: 0; display: grid; }
+.hero__slide {
+  grid-area: 1 / 1;
   width: 100%;
   max-height: 60vh;
   object-fit: cover;
   object-position: center top;
   border-radius: var(--radius);
+  opacity: 0;
+  transition: opacity .9s ease-in-out;
 }
+.hero__slide.is-active { opacity: 1; }
 
 .scroll-cue {
   position: absolute;
@@ -436,7 +441,7 @@ button { font: inherit; color: inherit; }
   }
   .hero__text { margin-inline: 0; }
   .hero__figure { height: 82vh; }
-  .hero__figure img {
+  .hero__slide {
     height: 100%;
     max-height: none;
     border-radius: var(--radius) 0 0 var(--radius);

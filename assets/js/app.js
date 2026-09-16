@@ -32,6 +32,10 @@
     ],
 
     audio: { volume: 0.35, fadeMs: 1500 },
+
+    // Thời gian mỗi ảnh hero đứng yên trước khi chuyển (ms).
+    // Thời lượng crossfade nằm ở .hero__slide { transition } trong style.css.
+    heroSlideMs: 3000,
   };
 
   const NAME_MAX = 40;
@@ -163,6 +167,46 @@
     targets.forEach((el) => io.observe(el));
   }
 
+  /* ── Slideshow ảnh hero ─────────────────────────────────────── */
+  const heroSlider = {
+    slides: [],
+    index: 0,
+    timer: 0,
+    ready: false,
+
+    /** Gọi được nhiều lần (khách bấm "Nhập lại tên" rồi mở thiệp lại). */
+    init() {
+      if (this.ready) { this.play(); return; }
+
+      this.slides = $$('.hero__slide');
+      if (this.slides.length < 2) return;            // 1 ảnh thì không có gì để chuyển
+
+      this.ready = true;
+      document.addEventListener('visibilitychange', () => {
+        document.hidden ? this.pause() : this.play();
+      });
+      this.play();
+    },
+
+    play() {
+      // Khách bật "giảm chuyển động" → giữ ảnh đầu, không tự chạy.
+      // card.hidden: đang ở Màn 1, không chạy timer vô ích.
+      if (!this.ready || this.timer || card.hidden || reducedMotion()) return;
+      this.timer = setInterval(() => this.next(), CONFIG.heroSlideMs);
+    },
+
+    pause() {
+      clearInterval(this.timer);
+      this.timer = 0;
+    },
+
+    next() {
+      this.slides[this.index].classList.remove('is-active');
+      this.index = (this.index + 1) % this.slides.length;
+      this.slides[this.index].classList.add('is-active');
+    },
+  };
+
   /* ── Nhạc nền ───────────────────────────────────────────────── */
   const audio = {
     available: false,
@@ -290,6 +334,7 @@
     renderName(name);
     renderPronoun(year);
     card.hidden = false;
+    heroSlider.init();                          // sau khi card hiện, ảnh mới có kích thước
 
     if (!animate || reducedMotion()) {
       gate.hidden = true;
@@ -314,6 +359,7 @@
     history.replaceState(null, '', url);
 
     if (bgm) bgm.pause();
+    heroSlider.pause();
     card.hidden = true;
     gate.hidden = false;
     gate.classList.remove('is-leaving');

@@ -62,8 +62,13 @@
       <p class="hero__sub">Một chặng đường đã khép lại để mở ra những hành trình mới.</p>
       <p class="hero__brand">Hello, I'm <span>Dawn</span></p>
     </div>
-    <figure class="hero__figure">
-      <img src="assets/img/portrait.jpg" alt="Ảnh chân dung của Đức" width="832" height="1248" fetchpriority="high">
+    <figure class="hero__figure" id="hero-slider">
+      <img class="hero__slide is-active" src="assets/img/portrait.jpg"
+           alt="Ảnh chân dung của Đức" width="1004" height="1408"
+           fetchpriority="high" decoding="async">
+      <img class="hero__slide" src="assets/img/2A203614-AE62-4542-8D9C-1D5A253AE2FC_1_105_c.jpg"
+           alt="Ảnh kỷ yếu tốt nghiệp của Đức" width="724" height="1086"
+           decoding="async">
     </figure>
     <button class="scroll-cue" type="button" id="scroll-cue" aria-label="Cuộn xuống để đọc thư mời">
       <span aria-hidden="true">↓</span>
