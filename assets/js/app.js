@@ -12,7 +12,7 @@
     owner: { name: 'Đức', birthYear: 2004 },
 
     venue:   'Học viện Công nghệ Bưu chính Viễn thông',
-    // Hiển thị ở hàng ĐỊA CHỈ; để trống thì hàng đó tự ẩn.
+    // Hàng ĐỊA CHỈ luôn hiện, nên field này đừng để trống.
     // Chỉ dùng để hiển thị và ghi vào file .ics — nút Chỉ đường đi theo
     // mapCoords bên dưới, nên hai giá trị này phải cùng một cơ sở.
     address: 'Km10 Nguyễn Trãi, Hà Đông, Hà Nội',
@@ -22,6 +22,16 @@
     // Chỉ đường bằng toạ độ chính xác hơn tra theo tên, vì PTIT có 2 cơ sở
     // và Maps hay trả về nhầm cơ sở Cầu Giấy. Để '' thì quay về tra theo tên.
     mapCoords: '20.980913,105.7874165',
+
+    // Chỗ gửi xe gần trường. Mỗi mục thành một nút mở thẳng Google Maps.
+    // Mảng rỗng thì hàng GỬI XE tự ẩn.
+    parking: {
+      lead: 'Có thể gửi xe tại:',
+      places: [
+        { name: 'Hồ Gươm Plaza',        url: 'https://maps.app.goo.gl/e4G7nU3UjNV92YCw5' },
+        { name: 'Siêu thị Nguyễn Kim',  url: 'https://maps.app.goo.gl/9X7qKtfutyqTAW5N6' },
+      ],
+    },
 
     event: {
       title: 'Lễ tốt nghiệp của Đức',
@@ -134,6 +144,36 @@
   }
 
   /* ── Render phần phụ thuộc CONFIG ───────────────────────────── */
+  /** Dòng dẫn + mỗi chỗ gửi xe một nút mở Google Maps ở tab mới. */
+  function renderParking() {
+    const dd  = $('#info-parking');
+    const row = dd.closest('.info__row');
+    const places = CONFIG.parking?.places ?? [];
+
+    if (!places.length) { row.hidden = true; return; }
+    dd.textContent = '';
+
+    const lead = document.createElement('p');
+    lead.className = 'info__parking-lead';
+    lead.textContent = CONFIG.parking.lead;
+    dd.append(lead);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'info__parking-links';
+
+    places.forEach((place) => {
+      const a = document.createElement('a');
+      a.className = 'btn btn--ghost btn--sm';
+      a.href = place.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = place.name;
+      wrap.append(a);
+    });
+
+    dd.append(wrap);
+  }
+
   /** Ngày trên một dòng, mỗi khung giờ một dòng nhãn + giờ bên dưới. */
   function renderEventTime() {
     const dd = $('#info-time');
@@ -176,16 +216,9 @@
 
   function renderStaticContent() {
     renderEventTime();
-    $('#info-venue').textContent = CONFIG.venue;
-
-    // Hàng ĐỊA CHỈ hiện không có trong index.html — guard để điền
-    // CONFIG.address không làm chết cả hàm render.
-    const addrEl = $('#info-address');
-    if (CONFIG.address && addrEl) {
-      addrEl.textContent = CONFIG.address;
-      const row = $('#info-address-row');
-      if (row) row.hidden = false;
-    }
+    $('#info-venue').textContent   = CONFIG.venue;
+    $('#info-address').textContent = CONFIG.address;
+    renderParking();
 
     // Chỉ đường: ưu tiên toạ độ (không nhầm cơ sở), không có thì tra theo tên.
     const destination = CONFIG.mapCoords

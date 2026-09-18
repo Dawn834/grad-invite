@@ -90,6 +90,14 @@ button { font: inherit; color: inherit; }
 }
 .btn--ghost:hover { background: var(--c-on-wine); color: var(--c-wine); }
 
+/* Nút phụ, dùng cho danh sách chỗ gửi xe */
+.btn--sm {
+  padding: .55rem 1.1rem;
+  font-family: var(--font-body);   /* nằm trong <dd> nên phải ép, không kế thừa Lora */
+  font-size: .7rem;
+  letter-spacing: .08em;
+}
+
 :where(a, button, input):focus-visible {
   outline: 2px solid var(--c-gold);
   outline-offset: 3px;
@@ -351,6 +359,17 @@ button { font: inherit; color: inherit; }
   color: var(--c-gold);
 }
 .info__slot-time { font-size: .95em; }
+/* Hàng GỬI XE: dòng dẫn nhỏ rồi tới các nút */
+.info__parking-lead {
+  margin: 0 0 .6rem;
+  font-family: var(--font-body);
+  font-size: .85rem;
+  font-weight: 300;
+  color: rgba(246, 236, 227, .72);
+}
+.info__parking-links { display: flex; flex-wrap: wrap; gap: .5rem; }
+.info__row[hidden] { display: none; }
+
 .info__note {
   margin: .7rem 0 0;
   font-family: var(--font-body);
