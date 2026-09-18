@@ -18,16 +18,29 @@
     address: '',
 
     event: {
-      title:  'Lễ tốt nghiệp của Đức',
-      // Giờ địa phương Việt Nam (UTC+7). startUtc/endUtc dùng cho file .ics.
-      display: '10:00 — Thứ Bảy, 26/09/2026',
-      startUtc: '20260926T030000Z',   // 10:00 ICT
-      endUtc:   '20260926T053000Z',   // 12:30 ICT
+      title: 'Lễ tốt nghiệp của Đức',
+      date:  'Thứ Bảy, 26/09/2026',
+
+      // Hai khung giờ để khách chọn khung nào tiện. Thêm/bớt phần tử là
+      // thẻ Thông tin tự cập nhật, không phải đụng vào HTML.
+      slots: [
+        { label: 'Đầu lễ',  time: '7:30 – 9:00 sáng' },
+        { label: 'Cuối lễ', time: '11:30 sáng' },
+      ],
+
+      // Ghi chú dưới hai khung giờ. Để '' thì dòng này tự ẩn.
+      // Viết trung tính, không đại từ — vì render trước khi biết năm sinh khách.
+      note: 'Hai khung giờ này là lúc dễ gặp nhau nhất — ghé lúc nào cũng được.',
+
+      // File .ics chỉ chứa 1 sự kiện nên phải bao trọn cả hai khung.
+      // Giờ địa phương Việt Nam (UTC+7) → trừ 7 tiếng ra giờ UTC.
+      startUtc: '20260926T003000Z',   // 07:30 ICT
+      endUtc:   '20260926T050000Z',   // 12:00 ICT
     },
 
     timeline: [
-      { time: '07:30', desc: 'Lễ trao bằng chính thức' },
-      { time: '10:00', desc: 'Chụp ảnh check-in' },
+      { time: '07:30', desc: 'Bắt đầu buổi lễ trao bằng chính thức' },
+      { time: '11:30', desc: 'Kết thúc buổi lễ, Chụp ảnh check-in' },
       // { time: '11:30', desc: 'Tiệc nhẹ / Ăn trưa cùng gia đình & bạn bè' },
     ],
 
@@ -115,8 +128,48 @@
   }
 
   /* ── Render phần phụ thuộc CONFIG ───────────────────────────── */
+  /** Ngày trên một dòng, mỗi khung giờ một dòng nhãn + giờ bên dưới. */
+  function renderEventTime() {
+    const dd = $('#info-time');
+    dd.textContent = '';
+
+    const date = document.createElement('span');
+    date.className = 'info__date';
+    date.textContent = CONFIG.event.date;
+    dd.append(date);
+
+    if (!CONFIG.event.slots?.length) return;
+
+    const ul = document.createElement('ul');
+    ul.className = 'info__slots';
+
+    CONFIG.event.slots.forEach((slot) => {
+      const li = document.createElement('li');
+      li.className = 'info__slot';
+
+      const label = document.createElement('span');
+      label.className = 'info__slot-label';
+      label.textContent = slot.label;
+
+      const time = document.createElement('span');
+      time.className = 'info__slot-time';
+      time.textContent = slot.time;
+
+      li.append(label, time);
+      ul.append(li);
+    });
+
+    dd.append(ul);
+
+    if (!CONFIG.event.note) return;
+    const note = document.createElement('p');
+    note.className = 'info__note';
+    note.textContent = CONFIG.event.note;
+    dd.append(note);
+  }
+
   function renderStaticContent() {
-    $('#info-time').textContent  = CONFIG.event.display;
+    renderEventTime();
     $('#info-venue').textContent = CONFIG.venue;
 
     if (CONFIG.address) {
