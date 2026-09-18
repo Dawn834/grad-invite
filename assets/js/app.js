@@ -12,10 +12,16 @@
     owner: { name: 'Đức', birthYear: 2004 },
 
     venue:   'Học viện Công nghệ Bưu chính Viễn thông',
-    // Để trống thì dòng ĐỊA CHỈ tự ẩn và nút Chỉ đường chỉ tra theo tên trường.
-    // PTIT có 2 cơ sở — điền chính xác cơ sở tổ chức lễ, ví dụ:
-    //   'Km10 Nguyễn Trãi, Hà Đông, Hà Nội'  |  '122 Hoàng Quốc Việt, Cầu Giấy, Hà Nội'
-    address: '',
+    // Hiển thị ở hàng ĐỊA CHỈ; để trống thì hàng đó tự ẩn.
+    // Chỉ dùng để hiển thị và ghi vào file .ics — nút Chỉ đường đi theo
+    // mapCoords bên dưới, nên hai giá trị này phải cùng một cơ sở.
+    address: 'Km10 Nguyễn Trãi, Hà Đông, Hà Nội',
+
+    // Toạ độ cơ sở tổ chức lễ, lấy từ link Google Maps:
+    //   https://maps.app.goo.gl/5iR78X4Rr4bwZF1N6  (PTIT Hà Đông)
+    // Chỉ đường bằng toạ độ chính xác hơn tra theo tên, vì PTIT có 2 cơ sở
+    // và Maps hay trả về nhầm cơ sở Cầu Giấy. Để '' thì quay về tra theo tên.
+    mapCoords: '20.980913,105.7874165',
 
     event: {
       title: 'Lễ tốt nghiệp của Đức',
@@ -172,13 +178,18 @@
     renderEventTime();
     $('#info-venue').textContent = CONFIG.venue;
 
-    if (CONFIG.address) {
-      $('#info-address').textContent = CONFIG.address;
-      $('#info-address-row').hidden = false;
+    // Hàng ĐỊA CHỈ hiện không có trong index.html — guard để điền
+    // CONFIG.address không làm chết cả hàm render.
+    const addrEl = $('#info-address');
+    if (CONFIG.address && addrEl) {
+      addrEl.textContent = CONFIG.address;
+      const row = $('#info-address-row');
+      if (row) row.hidden = false;
     }
 
-    // Chỉ đường: ưu tiên địa chỉ đầy đủ, không có thì tra theo tên trường.
-    const destination = [CONFIG.venue, CONFIG.address].filter(Boolean).join(', ');
+    // Chỉ đường: ưu tiên toạ độ (không nhầm cơ sở), không có thì tra theo tên.
+    const destination = CONFIG.mapCoords
+      || [CONFIG.venue, CONFIG.address].filter(Boolean).join(', ');
     $('#btn-directions').href =
       `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
 
