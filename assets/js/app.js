@@ -23,6 +23,9 @@
     // và Maps hay trả về nhầm cơ sở Cầu Giấy. Để '' thì quay về tra theo tên.
     mapCoords: '20.980913,105.7874165',
 
+    // Số liên hệ. Hiển thị tách nhóm cho dễ đọc, href dùng số liền không dấu cách.
+    phone: '0915937166',
+
     // Chỗ gửi xe gần trường. Mỗi mục thành một nút mở thẳng Google Maps.
     // Mảng rỗng thì hàng GỬI XE tự ẩn.
     parking: {
@@ -144,6 +147,23 @@
   }
 
   /* ── Render phần phụ thuộc CONFIG ───────────────────────────── */
+  /** Số điện thoại thành link tel: — chạm một phát là gọi được trên mobile. */
+  function renderPhone() {
+    const dd = $('#info-phone');
+    const raw = String(CONFIG.phone || '').replace(/\D/g, '');
+
+    if (!raw) { dd.closest('.info__row').hidden = true; return; }
+
+    const a = document.createElement('a');
+    a.className = 'info__phone';
+    a.href = `tel:${raw}`;
+    // 0915937166 → 0915 937 166
+    a.textContent = raw.replace(/^(\d{4})(\d{3})(\d+)$/, '$1 $2 $3');
+
+    dd.textContent = '';
+    dd.append(a);
+  }
+
   /** Dòng dẫn + mỗi chỗ gửi xe một nút mở Google Maps ở tab mới. */
   function renderParking() {
     const dd  = $('#info-parking');
@@ -219,6 +239,7 @@
     $('#info-venue').textContent   = CONFIG.venue;
     $('#info-address').textContent = CONFIG.address;
     renderParking();
+    renderPhone();
 
     // Chỉ đường: ưu tiên toạ độ (không nhầm cơ sở), không có thì tra theo tên.
     const destination = CONFIG.mapCoords
